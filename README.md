@@ -73,6 +73,34 @@ If `models/rps_classifier.keras` is missing, the app will show an error message 
 
 ---
 
+# Real-World Testing
+
+Validation accuracy and real-world accuracy are not always the same.
+
+The validation split in this project comes from the same original dataset used for training, so many images share similar lighting, framing, backgrounds, and gesture styles. Because of that, validation results can look very strong even when the model is less reliable on new photos taken in everyday conditions.
+
+To track real-world performance, use the folders below:
+
+* `real_world_tests/rock`
+* `real_world_tests/paper`
+* `real_world_tests/scissors`
+
+Add external photos to the correct folder, then run:
+
+```bash
+python real_world_evaluation.py
+```
+
+This workflow will:
+
+* evaluate every image in `real_world_tests`
+* save incorrect predictions to `docs/screenshots/real_world_failures/`
+* generate `docs/real_world_results.md`
+
+One especially useful failure to watch for is a real-world scissors image predicted as rock. That kind of mistake is a reminder that a model can look excellent on a clean validation split while still struggling with unfamiliar angles, cluttered backgrounds, or different lighting in the real world.
+
+---
+
 # Results
 
 ## Dataset
