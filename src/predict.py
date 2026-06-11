@@ -7,8 +7,8 @@ from pathlib import Path
 import numpy as np
 from PIL import Image
 
-from src.config import CLASS_NAMES, IMAGE_SIZE, MODEL_PATH
-from src.data_utils import load_image_array
+from src.config import CLASS_NAMES, MODEL_PATH
+from src.data_utils import load_image_array, preprocess_pil_image
 
 
 def get_top_prediction(scores: Sequence[float]) -> tuple[str, float]:
@@ -29,9 +29,7 @@ def load_trained_model(model_path: str | Path = MODEL_PATH):
 
 def prepare_image(image: Image.Image) -> np.ndarray:
     """Resize one PIL image and scale pixels to the 0-1 range."""
-    image = image.convert("RGB")
-    image = image.resize(IMAGE_SIZE)
-    return np.asarray(image, dtype=np.float32) / 255.0
+    return preprocess_pil_image(image)
 
 
 def predict_probabilities(image_array: np.ndarray, model) -> dict[str, float]:

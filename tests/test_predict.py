@@ -51,3 +51,11 @@ def test_predict_probabilities_returns_all_classes():
     probabilities = predict_probabilities(image_array, FakeModel())
 
     assert probabilities == {"rock": 0.1, "paper": 0.8, "scissors": 0.1}
+
+
+def test_predict_probabilities_preserves_class_order():
+    image_array = np.zeros((IMAGE_SIZE[0], IMAGE_SIZE[1], 3), dtype=np.float32)
+
+    probabilities = predict_probabilities(image_array, FakeModel())
+
+    assert list(probabilities.keys()) == ["rock", "paper", "scissors"]

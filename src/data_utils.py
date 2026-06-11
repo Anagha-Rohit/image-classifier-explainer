@@ -8,6 +8,13 @@ from PIL import Image
 from src.config import BATCH_SIZE, CLASS_NAMES, DATA_DIR, IMAGE_SIZE, RANDOM_SEED
 
 
+def preprocess_pil_image(image: Image.Image) -> np.ndarray:
+    """Resize one PIL image and scale pixels to the 0-1 range."""
+    image = image.convert("RGB")
+    image = image.resize(IMAGE_SIZE)
+    return np.asarray(image, dtype=np.float32) / 255.0
+
+
 def get_data_directory() -> Path:
     """Return the default location where a dataset can be stored later."""
     return Path(DATA_DIR)
@@ -46,9 +53,8 @@ def validate_dataset_directory(data_dir: str | Path = DATA_DIR) -> Path:
 
 def load_image_array(image_path: str | Path) -> np.ndarray:
     """Load one image, resize it, and scale pixels to the 0-1 range."""
-    image = Image.open(image_path).convert("RGB")
-    image = image.resize(IMAGE_SIZE)
-    return np.asarray(image, dtype=np.float32) / 255.0
+    image = Image.open(image_path)
+    return preprocess_pil_image(image)
 
 
 def load_training_datasets(

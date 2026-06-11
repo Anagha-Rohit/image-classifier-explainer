@@ -67,6 +67,8 @@ The app will:
 * display the confidence score
 * display the probability for all three classes
 
+At the moment, the Streamlit app uses the same basic preprocessing path as training and `src.predict.py`: convert to RGB, resize to `128 x 128`, and normalize pixel values to the `0-1` range. If many real-world images are still predicted as `rock`, that should be treated as a real model weakness rather than hidden, and the class probabilities should be inspected during debugging.
+
 ## If the app cannot find the model
 
 If `models/rps_classifier.keras` is missing, the app will show an error message instead of crashing.
