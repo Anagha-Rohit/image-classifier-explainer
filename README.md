@@ -109,3 +109,20 @@ One especially useful failure to watch for is a real-world scissors image predic
 | --------------- | ----: |
 | Total Images    | 2,520 |
 | Training Images |       |
+
+## Key Finding
+
+Although the model achieved 100% accuracy on the validation split of the dataset, real-world testing revealed several incorrect predictions.
+
+This highlights an important machine learning lesson: strong performance on a benchmark dataset does not always translate to strong performance on new, real-world data.
+
+During testing with images collected outside the original dataset, the model occasionally misclassified hand gestures despite achieving perfect validation metrics. This suggests that the model learned patterns that work well for the training distribution but may not generalize reliably to different lighting conditions, camera angles, backgrounds, and image quality.
+
+To better understand this behavior, the project now includes a separate real-world evaluation workflow that records failures and helps identify opportunities for improvement.
+
+This experience reinforced the importance of:
+
+* testing beyond the training dataset
+* analyzing failure cases instead of only reporting accuracy
+* understanding the difference between validation performance and real-world performance
+* continuously improving datasets and evaluation methods

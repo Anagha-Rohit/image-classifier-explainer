@@ -6,3 +6,6 @@ __pycache__/
 models/
 artifacts/
 
+rps.zip
+data/
+rps/
