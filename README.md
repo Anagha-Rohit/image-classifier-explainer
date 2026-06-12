@@ -6,6 +6,7 @@ The project demonstrates the complete machine learning workflow:
 
 * dataset preparation
 * model training
+* data augmentation
 * evaluation
 * prediction
 * testing
@@ -112,19 +113,59 @@ One especially useful failure to watch for is a real-world scissors image predic
 | Total Images    | 2,520 |
 | Training Images |       |
 
-## Key Finding
+## Before and After Augmentation
 
-Although the model achieved 100% accuracy on the validation split of the dataset, real-world testing revealed several incorrect predictions.
+| Model | Validation Accuracy | Real-World Accuracy | Real-World F1 Score | Notes |
+|---|---:|---:|---:|---|
+| Baseline CNN | 100.00% | 21.43% | 22.49% | Performs very well on the clean validation split but generalizes poorly to real-world images. |
+| Augmented CNN | TBD | 35.71% | 30.00% | Real-world results improved, but the augmented validation accuracy still needs to be recorded. |
 
-This highlights an important machine learning lesson: strong performance on a benchmark dataset does not always translate to strong performance on new, real-world data.
+The augmented model has been trained and evaluated on the real-world test images, but this README does not yet have a documented augmented validation accuracy. That value should be added after running `evaluate.py` on `models/rps_classifier_augmented.keras`.
 
-During testing with images collected outside the original dataset, the model occasionally misclassified hand gestures despite achieving perfect validation metrics. This suggests that the model learned patterns that work well for the training distribution but may not generalize reliably to different lighting conditions, camera angles, backgrounds, and image quality.
+The baseline model achieved perfect validation accuracy on the original dataset. Real-world testing showed much weaker performance: 21.43% accuracy on 14 real-world images, with 11 mistakes. This suggests a generalization problem rather than a simple app bug. Data augmentation was added to improve robustness to lighting, cropping, camera angle, and background differences.
 
-To better understand this behavior, the project now includes a separate real-world evaluation workflow that records failures and helps identify opportunities for improvement.
+## Real-World Test Set
 
-This experience reinforced the importance of:
+The real-world test set contains 14 images collected outside the original training dataset:
 
-* testing beyond the training dataset
-* analyzing failure cases instead of only reporting accuracy
-* understanding the difference between validation performance and real-world performance
-* continuously improving datasets and evaluation methods
+| Class | Images |
+|---|---:|
+| Rock | 5 |
+| Paper | 5 |
+| Scissors | 4 |
+
+One important baseline failure was a real-world scissors image predicted as `rock` with 98.89% confidence. This failure is intentionally kept visible because high-confidence mistakes are useful evidence when improving a model.
+
+## Data Augmentation
+
+Data augmentation means showing the model slightly changed versions of the training images while it learns. For this project, the augmented training pipeline can randomly rotate, zoom, shift, and adjust brightness or contrast. These changes do not create perfect real-world coverage, but they help the model practice with images that are less centered and less clean than the original dataset.
+
+Train the augmented model:
+
+```bash
+python train.py
+```
+
+By default, this saves:
+
+```text
+models/rps_classifier_augmented.keras
+```
+
+Evaluate the augmented model on the validation split:
+
+```bash
+python evaluate.py --model-path models/rps_classifier_augmented.keras --output-dir docs/screenshots/augmented
+```
+
+Evaluate the augmented model on real-world images:
+
+```bash
+python real_world_evaluation.py --model-path models/rps_classifier_augmented.keras --report-path docs/real_world_results_augmented.md
+```
+
+Reproduce the baseline comparison:
+
+```bash
+python real_world_evaluation.py --model-path models/rps_classifier.keras --report-path docs/real_world_results_baseline.md
+```
