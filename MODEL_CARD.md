@@ -12,6 +12,8 @@ This model is intended as a beginner portfolio project for image classification 
 
 Small convolutional neural network built with TensorFlow / Keras.
 
+Phase 4 keeps the CNN architecture simple and adds data augmentation before the convolution layers during training.
+
 ## Input
 
 - image of a hand gesture
@@ -34,6 +36,28 @@ Expected classes:
 - `scissors`
 
 The project expects images to be stored in class folders under `data/`.
+
+## Training Approach
+
+The original Phase 3 model was trained on the clean dataset and saved as:
+
+- `models/rps_classifier.keras`
+
+The Phase 4 model uses the same dataset and the same `rock`, `paper`, `scissors` class order, but adds simple random image changes during training:
+
+- small rotations
+- small zoom changes
+- small horizontal and vertical translations
+- brightness variation when supported by the installed Keras version
+- contrast variation
+
+These changes are called data augmentation. They help the model see examples that are a little closer to real-world photos, where the hand may not be perfectly centered or lit the same way as the training images.
+
+The augmented model is saved separately as:
+
+- `models/rps_classifier_augmented.keras`
+
+Preprocessing remains consistent across training, prediction, Streamlit, and evaluation: images are converted to RGB, resized to `128 x 128`, and scaled to the `0-1` pixel range.
 
 ## Evaluation
 
@@ -60,6 +84,19 @@ Saved evaluation artifacts:
 - correct examples saved: 6
 - incorrect examples saved: 0
 
+For Phase 4 comparison, evaluate the augmented model with:
+
+```bash
+python evaluate.py --model-path models/rps_classifier_augmented.keras --output-dir docs/screenshots/augmented
+```
+
+Real-world testing can also compare both models:
+
+```bash
+python real_world_evaluation.py --model-path models/rps_classifier.keras
+python real_world_evaluation.py --model-path models/rps_classifier_augmented.keras
+```
+
 Metric meanings:
 
 - Accuracy: how often the model is correct overall.
@@ -73,6 +110,7 @@ Metric meanings:
 - The model may not work well with unusual lighting, hand angles, backgrounds, or camera quality.
 - The model only predicts `rock`, `paper`, or `scissors`; it does not know when an image is unrelated.
 - Metrics can look strong on a simple dataset while still hiding real-world mistakes.
+- Data augmentation can improve robustness, but it does not guarantee perfect real-world performance.
 - Explainability has not been added yet.
 
 ## Ethical And Practical Notes

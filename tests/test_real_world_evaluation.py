@@ -1,10 +1,12 @@
 from pathlib import Path
 
+from src.config import AUGMENTED_MODEL_PATH
 from real_world_evaluation import (
     build_real_world_report,
     collect_real_world_images,
     ensure_real_world_directories,
     find_scissors_predicted_as_rock,
+    parse_args,
 )
 
 
@@ -65,3 +67,11 @@ def test_build_real_world_report_mentions_scissors_failure_when_present(tmp_path
     report_text = report_path.read_text(encoding="utf-8")
     assert "A real-world scissors image was predicted as rock" in report_text
     assert "Validation accuracy can look very high" in report_text
+
+
+def test_real_world_evaluation_defaults_to_augmented_model(monkeypatch):
+    monkeypatch.setattr("sys.argv", ["real_world_evaluation.py"])
+
+    args = parse_args()
+
+    assert args.model_path == AUGMENTED_MODEL_PATH

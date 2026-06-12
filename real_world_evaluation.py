@@ -10,7 +10,7 @@ from evaluate import (
     calculate_metrics,
     save_labeled_example,
 )
-from src.config import CLASS_NAMES, MODEL_PATH
+from src.config import AUGMENTED_MODEL_PATH, CLASS_NAMES
 from src.predict import get_top_prediction, load_trained_model, predict_probabilities
 from src.data_utils import load_image_array
 
@@ -29,7 +29,7 @@ def parse_args():
     )
     parser.add_argument(
         "--model-path",
-        default=MODEL_PATH,
+        default=AUGMENTED_MODEL_PATH,
         help="Path to the saved Keras model.",
     )
     parser.add_argument(

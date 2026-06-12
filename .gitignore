@@ -9,3 +9,17 @@ artifacts/
 rps.zip
 data/
 rps/
+
+# Local real-world test images
+real_world_tests/**/*.jpg
+real_world_tests/**/*.jpeg
+real_world_tests/**/*.png
+real_world_tests/**/*.webp
+
+# Generated real-world failure images
+docs/screenshots/real_world_failures/*
+!docs/screenshots/real_world_failures/.gitkeep
+
+# Generated incorrect example images
+docs/screenshots/incorrect_examples/*
+!docs/screenshots/incorrect_examples/.gitkeep
